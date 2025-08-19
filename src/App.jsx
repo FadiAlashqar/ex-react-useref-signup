@@ -3,11 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 
 function App() {
 
-  const [completeName, setCompleteName] = useState('')
+  console.log('render')
+
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [specialization, setSpecialization] = useState('')
-  const [experience, setExperience] = useState(0)
   const [description, setDescription] = useState('')
 
   const handleSubmit = (e) => {
@@ -16,13 +15,13 @@ function App() {
 
     const select = document.querySelector('.form-select')
 
-    if (completeName && userName && password && select.value && experience > 0 && description) {
+    if (nameRef.current.value && userName && password && specializationRef.current.value && experienceRef.current.value > 0 && description) {
       console.log(`
-     - Nome : ${completeName}
+     - Nome : ${nameRef.current.value}
      - Username : ${userName}
      - Password : ${password}
-     - Specializzazione : ${specialization}
-     - Esperienza : ${experience}
+     - Specializzazione : ${specializationRef.current.value}
+     - Esperienza : ${experienceRef.current.value}
      - Descrizione : ${description}
       `)
     }
@@ -46,6 +45,11 @@ function App() {
 
   const noSpaceDescription = description === description.trim()
 
+  const nameRef = useRef();
+  const specializationRef = useRef();
+  const experienceRef = useRef(0);
+
+
 
   return (
     <div className="container">
@@ -57,8 +61,7 @@ function App() {
               <input
                 type="text"
                 id='name'
-                value={completeName}
-                onChange={(e) => setCompleteName(e.target.value)}
+                ref={nameRef}
               />
             </section>
             <section className='my-2'>
@@ -68,6 +71,7 @@ function App() {
                 id='username'
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
+                className='mx-2'
               />
               {includesLetters && includesNumbers && !includesSymbols && noSpace && userName.length >= 6 ? <p className="text-success">Campo valido</p> : <p className="text-danger">Campo non valido</p>}
             </section>
@@ -78,14 +82,15 @@ function App() {
                 id='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className='mx-2'
               />
               {passIncludesLetters && passIncludesNumbers && passIncludesSymbols && password.length >= 8 ? <p className="text-success">Campo valido</p> : <p className="text-danger">Campo non valido</p>}
             </section>
             <section className='my-2'>
               <label><strong>Choose specialization</strong></label>
               <select className="form-select"
-                value={specialization}
-                onChange={(e) => setSpecialization(e.target.value)}>
+                ref={specializationRef}
+              >
                 <option defaultValue></option>
                 <option value='Full Stack'>Full Stack</option>
                 <option value='Frontend'>Frontend</option>
@@ -97,8 +102,8 @@ function App() {
               <input
                 type="number"
                 id='experience'
-                value={experience}
-                onChange={(e) => setExperience(e.target.value)}
+                ref={experienceRef}
+                className='mx-2'
               />
             </section>
             <div className="form-floating my-2">
