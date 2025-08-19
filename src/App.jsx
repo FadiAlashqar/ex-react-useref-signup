@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 
 function App() {
@@ -31,6 +31,21 @@ function App() {
     }
   }
 
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{}|;:'\\,.<>?/`~";
+
+  const includesLetters = letters.split("").some((c) => userName.includes(c))
+  const includesNumbers = numbers.split("").some((n) => userName.includes(n))
+  const includesSymbols = symbols.split("").some((n) => userName.includes(n))
+  const noSpace = userName.trim() !== "" && !userName.includes(" ")
+
+  const passIncludesLetters = letters.split("").some((p) => password.includes(p))
+  const passIncludesNumbers = numbers.split("").some((p) => password.includes(p))
+  const passIncludesSymbols = symbols.split("").some((p) => password.includes(p))
+
+  const noSpaceDescription = description === description.trim()
+
 
   return (
     <div className="container">
@@ -54,6 +69,7 @@ function App() {
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
               />
+              {includesLetters && includesNumbers && !includesSymbols && noSpace && userName.length >= 6 ? <p className="text-success">Campo valido</p> : <p className="text-danger">Campo non valido</p>}
             </section>
             <section>
               <label htmlFor="password"><strong>Password</strong></label>
@@ -63,6 +79,7 @@ function App() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {passIncludesLetters && passIncludesNumbers && passIncludesSymbols && password.length >= 8 ? <p className="text-success">Campo valido</p> : <p className="text-danger">Campo non valido</p>}
             </section>
             <section className='my-2'>
               <label><strong>Choose specialization</strong></label>
@@ -91,6 +108,7 @@ function App() {
                 id="floatingTextarea"></textarea>
               <label htmlFor="floatingTextarea">Brief description of your self</label>
             </div>
+            {description.length > 100 && description.length <= 1000 && noSpaceDescription ? <p className="text-success">Campo valido</p> : <p className="text-danger">Campo non valido</p>}
             <section>
               <button type='submit' onClick={(e) => handleSubmit(e)}>
                 Submit
@@ -104,3 +122,4 @@ function App() {
 }
 
 export default App
+
